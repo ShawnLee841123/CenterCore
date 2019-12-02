@@ -1,9 +1,9 @@
 ﻿##-----------------------------------------------------------------
 ##
-##
-##
-##
-##
+##	Name		Public Lib
+##	Functional	public lib sulotion control
+##	Creater		Shawn Lee
+##	Create time	2019-9
 ##
 ##
 ##

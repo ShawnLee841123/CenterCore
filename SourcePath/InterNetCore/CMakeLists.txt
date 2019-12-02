@@ -1,8 +1,8 @@
 ##-----------------------------------------------------------------
-##
-##
-##
-##
+##	Name			Inter net core
+##	Functional	Internet core sulotion program control
+##	creater		Shawn Lee
+##	create time	2019-12-1
 ##
 ##
 ##
