@@ -8,7 +8,7 @@
 ##
 ##
 ##-----------------------------------------------------------------
-include(${CMAKE_SOURCE_DIR}/common.cmake)
+include(${CMAKE_SOURCE_DIR}/Common.cmake)
 
 set(COMMON_SOURCES_files_SourceFiles
 	SourceFile/Common/LibThreadBase.cpp
@@ -32,7 +32,7 @@ set(COMMON_SOURCES_files_HeadFiles
 	Include/Common/StandardUnLockElement.h
 	Include/Common/tools.h
 	Include/Common/TypeDefines.h
-	Include/Common/UnLockElementtypeDefine.h
+	Include/Common/UnLockElementTypeDefine.h
 	Include/Common/UnLockQueue.h
 )
 

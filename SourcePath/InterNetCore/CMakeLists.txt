@@ -8,7 +8,7 @@
 ##
 ##
 ##-----------------------------------------------------------------
-include(${CMAKE_SOURCE_DIR}/common.cmake)
+include(${CMAKE_SOURCE_DIR}/Common.cmake)
 include(${CMAKE_SOURCE_DIR}/CoreInterface.cmake)
 ##-----------------------------------------------------------------
 ##	Port Completion	(windows)
@@ -57,7 +57,7 @@ if(WIN32)
 		${SOURCES_Interface}
 	)
 ##else(WIN32)
-endif(WIN32)
+#endif(WIN32)
 
 
 ADD_LIBRARY(${ProjectName} STATIC ${SOURCES_})
@@ -70,4 +70,6 @@ else(WIN32)
 endif(WIN32)
 
 SET_TARGET_PROPERTIES(${ProjectName} PROPERTIES FOLDER "Lib")
+
+endif(WIN32)
 
