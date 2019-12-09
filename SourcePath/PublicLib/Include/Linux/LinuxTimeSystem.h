@@ -12,10 +12,10 @@ double Linux_GetGMTTime();
 double Linux_GetGMTTimeStamp();
 
 //	获取时间戳（单位：毫秒）
-uint32 Linux_GetTimeStamp();
+UI32 Linux_GetTimeStamp();
 
 //	获取日期
-bool Linux_GetCurTimeString(char* strTime, uint32 uStrCout, const char* strParam = "", bool bNeedDayOfWeek = false);
+bool Linux_GetCurTimeString(char* strTime, UI32 uStrCout, const char* strParam = "", bool bNeedDayOfWeek = false);
 
 #endif	//	__LINUX_TIME_SYSTEM_H__
 

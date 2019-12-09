@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 //	获取当前工作路径
-bool Linux_GetCurrentDir(char* strOut, uint32 strCount);
+bool Linux_GetCurrentDir(char* strOut, UI32 strCount);
 
 //	创建目录
 bool Linux_CreatePath(const char* strName);
@@ -39,7 +39,7 @@ EFilePermissionCheckResult Linux_CheckFileOrPathPermission(const char* strName, 
 
 //	检查文件或目录是否有权限（公开）
 //	参数strName问路径时，只能检查路径是否存在
-EFilePermissionCheckResult Linux_CheckFilePermission(const char* strName, int eType);
+EFilePermissionCheckResult Linux_CheckFilePermission(const char* strName, SI32 eType);
 
 void Linux_PrintLogTextToScreen(const char* strValue, void* pConsole, ELogLevelType eType);
 

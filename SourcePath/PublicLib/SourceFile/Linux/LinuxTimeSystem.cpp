@@ -21,13 +21,13 @@ double Linux_GetGMTTimeStamp()
 }
 
 //	获取时间戳（单位：毫秒）
-uint32 Linux_GetTimeStamp()
+UI32 Linux_GetTimeStamp()
 {
 	return Linux_GetGMTTimeStamp();
 }
 
 //	获取日期
-bool Linux_GetCurTimeString(char* strTime, uint32 uStrCout, const char* strParam, bool bNeedDayOfWeek)
+bool Linux_GetCurTimeString(char* strTime, UI32 uStrCout, const char* strParam, bool bNeedDayOfWeek)
 {
 	if (nullptr == strTime)
 		return false;

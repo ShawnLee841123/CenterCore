@@ -4,7 +4,7 @@
 
 
 //	获取当前工作路径
-bool Linux_GetCurrentDir(char* strOut, uint32 strCount)
+bool Linux_GetCurrentDir(char* strOut, UI32 strCount)
 {
 	char* res = getcwd(strOut, strCount);
 	if (nullptr == res)
@@ -96,12 +96,12 @@ EFilePermissionCheckResult Linux_CheckFileOrPathPermission(const char* strName, 
 	if (0 == strName[0])
 		return EFPCR_NO_PERMISSION;
 
-	return ((access(strName, (int)eType) < 0) ? EFPCR_NO_PERMISSION : EFPCR_SUCCESS);
+	return ((access(strName, (SI32)eType) < 0) ? EFPCR_NO_PERMISSION : EFPCR_SUCCESS);
 }
 
 //	检查文件或目录是否有权限（公开）
 //	参数strName问路径时，只能检查路径是否存在
-EFilePermissionCheckResult Linux_CheckFilePermission(const char* strName, int eType)
+EFilePermissionCheckResult Linux_CheckFilePermission(const char* strName, SI32 eType)
 {
 	int eRet = (int)EFPCR_NO_PERMISSION;
 	if (nullptr == strName)
@@ -114,23 +114,23 @@ EFilePermissionCheckResult Linux_CheckFilePermission(const char* strName, int eT
 		return (EFilePermissionCheckResult)eRet;
 
 	if ((EFCST_EXISTS & eType) == EFCST_EXISTS)
-		eRet &= (int)Linux_CheckFileOrPathPermission(strName, EFCST_EXISTS);
+		eRet &= (SI32)Linux_CheckFileOrPathPermission(strName, EFCST_EXISTS);
 
 	if (((EFCT_READ & eType) == EFCT_READ) && ((EFCT_WRITE & eType) == EFCT_WRITE))
 	{
-		eRet &= (int)Linux_CheckFileOrPathPermission(strName, EFCST_READ_WRITE);
+		eRet &= (SI32)Linux_CheckFileOrPathPermission(strName, EFCST_READ_WRITE);
 		return (EFilePermissionCheckResult)eRet;
 	}
 
 	if ((EFCT_READ & eType) == EFCT_READ)
 	{
-		eRet &= (int)Linux_CheckFileOrPathPermission(strName, EFCST_READ);
+		eRet &= (SI32)Linux_CheckFileOrPathPermission(strName, EFCST_READ);
 		return (EFilePermissionCheckResult)eRet;
 	}
 
 	if ((EFCT_WRITE & eType) == EFCT_WRITE)
 	{
-		eRet &= (int)Linux_CheckFileOrPathPermission(strName, EFCST_WRITE);
+		eRet &= (SI32)Linux_CheckFileOrPathPermission(strName, EFCST_WRITE);
 		return (EFilePermissionCheckResult)eRet;
 	}
 

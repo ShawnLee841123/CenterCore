@@ -1,7 +1,7 @@
 
 #include "EpollSocketQueue.h"
-#include "EopllSocketQueueElement.h"
-
+#include "EpollSocketQueueElement.h"
+#include "../../PublicLib/Include/Common/UnlockElementTypeDefine.h"
 
 EpollSocketQueue::EpollSocketQueue(): m_QueueFuncMask(0)
 {

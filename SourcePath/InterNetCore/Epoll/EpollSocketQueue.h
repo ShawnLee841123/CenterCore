@@ -17,6 +17,7 @@
 #define __EPOLL_SOCKET_QUEUE_H__
 
 #include "EpollQueueElementDataDefine.h"
+#include "../../PublicLib/Include/Common/TypeDefines.h"
 #include <vector>
 #include <map>
 
@@ -40,21 +41,21 @@ public:
 	//	添加IO操作，将一个IO操作扔到队列中来，如果有操作，会将此操作返回滴
 	virtual bool AddIOOperate(_PER_IO_CONTEXT* pContext);
 	//	队列工作，目前还没想好返回值用什么，只是觉得应该返回错误类型等等这些信息
-	virtual int QueueWork(_PER_SOCKET_CONTEXT* pSocketContext);
+	virtual SI32 QueueWork(_PER_SOCKET_CONTEXT* pSocketContext);
 
 protected:
 
 #pragma region Socket queue operate process
 	//	客户端连接操作
-	virtual int DoAccept(_PER_SOCKET_CONTEXT* pSocketContext, _PER_IO_CONTEXT* pIoContext);
+	virtual SI32 DoAccept(_PER_SOCKET_CONTEXT* pSocketContext, _PER_IO_CONTEXT* pIoContext);
 	//	接收消息操作
-	virtual int DoReciveMsg(_PER_SOCKET_CONTEXT* pSocketContext, _PER_IO_CONTEXT* pIoContext);
+	virtual SI32 DoReciveMsg(_PER_SOCKET_CONTEXT* pSocketContext, _PER_IO_CONTEXT* pIoContext);
 	//	发送消息操作
-	virtual int DoSendMsg(_PER_SOCKET_CONTEXT* pSocketContext, _PER_IO_CONTEXT* pIoContext);
+	virtual SI32 DoSendMsg(_PER_SOCKET_CONTEXT* pSocketContext, _PER_IO_CONTEXT* pIoContext);
 #pragma endregion
 
 #pragma region Variable
-	_PER_IO_CONTEXT*				m_arrQueue[_PER_IO_CONTEXT];
+	_PER_IO_CONTEXT*				m_arrQueue[SOCKET_QUERY_ELEMENT_MAX];
 	SI16						m_QueueFuncMask;	//	队列操作标记
 #pragma endregion
 };
