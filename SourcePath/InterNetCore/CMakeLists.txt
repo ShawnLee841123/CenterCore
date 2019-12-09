@@ -44,8 +44,22 @@ source_group("CenterCore" FILES ${CENTER_CORE_files_SourceFiles})
 
 set(CenterCore_files ${CENTER_CORE_files_SourceFiles})
 
+set(EPOLL_files_SourceFiles
+	Epoll/EpollCenterCore.h
+	Epoll/EpollQueueElement.h
+	Epoll/EpollQueueElementDataDefine.h
+	Epoll/EpollSocketQueue.h
+	Epoll/EpollSocketQueueElement.h
+	Epoll/EpollWorker.h
+	Epoll/EpollCenterCore.cpp
+	Epoll/EpollQueueElement.cpp
+	Epoll/EpollSocketQueue.cpp
+	Epoll/EpollSocketQueueElement.cpp
+	Epoll/EpollWorker.cpp
+)
 
-
+source_group("Epoll" FILES ${EPOLL_files_SourceFiles})
+set(Epoll_files ${EPOLL_files_SourceFiles})
 
 
 SET(ProjectName InterNetCore)
@@ -56,8 +70,13 @@ if(WIN32)
 		${CenterCore_files}
 		${SOURCES_Interface}
 	)
-##else(WIN32)
-#endif(WIN32)
+else(WIN32)
+	set(SOURCES_
+		${Epoll_files}
+		${CenterCore_files}
+		${SOURCES_Interface}
+	)
+endif(WIN32)
 
 
 ADD_LIBRARY(${ProjectName} STATIC ${SOURCES_})
@@ -71,5 +90,4 @@ endif(WIN32)
 
 SET_TARGET_PROPERTIES(${ProjectName} PROPERTIES FOLDER "Lib")
 
-endif(WIN32)
 
