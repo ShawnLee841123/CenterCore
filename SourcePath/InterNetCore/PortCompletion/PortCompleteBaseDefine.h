@@ -53,7 +53,7 @@ typedef struct _PER_SOCKET_CONTEXT
 	int									RecvThreadID;		//	接收消息线程ID
 	int									SendThreadID;		//	发送消息线程ID
 	std::vector<LPOPERATE_IO_CONTEXT>	vIoContext;			//	IO操作队列
-	int64								storeID;
+	SI64								storeID;
 
 	_PER_SOCKET_CONTEXT();
 	virtual ~_PER_SOCKET_CONTEXT();
@@ -70,7 +70,7 @@ struct WorkerStoreInfo
 {
 	CORE_SOCKET				link;
 	CORE_SOCKETADDR_IN		Addr;
-	uint64					UUID;
+	UI64					UUID;
 	//WorkerStoreInfo();
 	//~WorkerStoreInfo();
 };

@@ -7,7 +7,7 @@
 #include <direct.h>
 #include <io.h>
 //	获取当前工作路径
-bool Windows_GetCurrentDir(char* strOut, uint32 strCount)
+bool Windows_GetCurrentDir(char* strOut, UI32 strCount)
 {
 	int res = (int)GetCurrentDirectoryA(strCount, strOut);
 	if (0 == res)

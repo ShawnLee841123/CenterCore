@@ -11,10 +11,10 @@ double GetGMTTime();
 double GetGMTTimeStamp();
 
 //	获取时间戳（单位：毫秒）
-uint32 GetTimeStamp();
+UI32 GetTimeStamp();
 
 //	获取日期
-bool GetCurTimeString(char* strTime, uint32 uStrCout, const char* strParam = "", bool bNeedDayOfWeek = false);
+bool GetCurTimeString(char* strTime, UI32 uStrCout, const char* strParam = "", bool bNeedDayOfWeek = false);
 
 
 #endif	//__LIB_TIME_SYSTEM_H__

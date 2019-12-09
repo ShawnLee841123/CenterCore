@@ -1,11 +1,5 @@
 ##-------------------------------------------------------------------------
 ##
-##	Name		Server Holder
-##	Functional	Server holder sulotion control
-##	Creater		Shawn Lee
-##	Create time	2019-12-1
-##
-##
 ##-------------------------------------------------------------------------
 include(${CMAKE_SOURCE_DIR}/CoreInterface.cmake)
 
@@ -29,6 +23,14 @@ set(SOURCES_
 
 	
 SET(ProjectName ServerHolder)
+
+##-----------------------------------------------------------------
+##	set stack memory size 999999KB	not right
+##-----------------------------------------------------------------
+#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl, --stack, 999999")
+#MATH(EXPR stack_size "4*1024*1024")
+#set(CMAKE_EXE_LINKER_FLAGS "-Wl,--stack,${stack_size}")
+
 ADD_EXECUTABLE(${ProjectName} ${SOURCES_})
 ADD_DEPENDENCIES(${ProjectName} PublicLib InterNetCore)
 TARGET_LINK_LIBRARIES(${ProjectName} PublicLib InterNetCore)

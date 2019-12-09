@@ -92,18 +92,18 @@ bool PortCompleteCore::OnStart()
 		UnLockQueueBase* pCoreWriteQueue = new UnLockQueueBase();
 		char strReadQueueName[64] = { 0 };
 		char strWriteQueueName[64] = { 0 };
-		int32 nThreadID = i + 1;
+		SI32 nThreadID = i + 1;
 
 		sprintf(strReadQueueName, "CoreReadQueue[%d]", nThreadID);
 		sprintf(strWriteQueueName, "CoreWriteQueue[%d]", nThreadID);
 		m_arrWorkThread[i]->SetThreadID(nThreadID);
 		m_arrWorkThread[i]->RegisterQueue(pCoreReadQueue, strReadQueueName, ESQT_WRITE_QUEUE);
 		m_arrWorkThread[i]->RegisterQueue(pCoreWriteQueue, strWriteQueueName, ESQT_READ_QUEUE);
-		m_dicCoreReadQueue.insert(std::pair<int32, UnLockQueueBase*>(nThreadID, pCoreReadQueue));
-		m_dicCoreWriteQueue.insert(std::pair<int32, UnLockQueueBase*>(nThreadID, pCoreWriteQueue));
+		m_dicCoreReadQueue.insert(std::pair<SI32, UnLockQueueBase*>(nThreadID, pCoreReadQueue));
+		m_dicCoreWriteQueue.insert(std::pair<SI32, UnLockQueueBase*>(nThreadID, pCoreWriteQueue));
 
 		//	初始化当前负载数量
-		m_dicWorkerSocketCount.insert(std::pair<int32, int32>(nThreadID, 0));
+		m_dicWorkerSocketCount.insert(std::pair<SI32, SI32>(nThreadID, 0));
 
 		//	Register LogQueue
 		char strLogQueueName[64] = { 0 };
@@ -162,11 +162,11 @@ bool PortCompleteCore::OnDestroy()
 
 #pragma region Socket data operate
 #ifdef _WIN_
-int64 PortCompleteCore::MakeStoreID()
+SI64 PortCompleteCore::MakeStoreID()
 {
-	std::map<int64, int32>::iterator iter = m_dicWorkerSocketCount.begin();
-	int64 nMinThreadID = iter->first;
-	int32 nMinCount = iter->second;
+	std::map<SI64, SI32>::iterator iter = m_dicWorkerSocketCount.begin();
+	SI64 nMinThreadID = iter->first;
+	SI32 nMinCount = iter->second;
 
 	//	找出负载最小的线程ID
 	for (; iter != m_dicWorkerSocketCount.end(); ++iter)
@@ -179,17 +179,17 @@ int64 PortCompleteCore::MakeStoreID()
 	return nMinThreadID;
 }
 
-bool PortCompleteCore::AddSocketContext(int64 nStoreID, OPERATE_SOCKET_CONTEXT* pContext)
+bool PortCompleteCore::AddSocketContext(SI64 nStoreID, OPERATE_SOCKET_CONTEXT* pContext)
 {
-	std::map<int64, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_dicSocktPool.find(nStoreID);
-	int32 nThreadCurSocketCount = m_dicWorkerSocketCount[nStoreID];
+	std::map<SI64, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_dicSocktPool.find(nStoreID);
+	SI32 nThreadCurSocketCount = m_dicWorkerSocketCount[nStoreID];
 
 	if (iter == m_dicSocktPool.end())
 	{
 		OPERATE_SOCKET_CONTEXT* pNewContext = new OPERATE_SOCKET_CONTEXT();
 		*pNewContext = *pContext;
 		pNewContext->storeID = nStoreID;
-		m_dicSocktPool.insert(std::pair<int64, OPERATE_SOCKET_CONTEXT*>(nStoreID, pNewContext));
+		m_dicSocktPool.insert(std::pair<SI64, OPERATE_SOCKET_CONTEXT*>(nStoreID, pNewContext));
 		m_dicWorkerSocketCount[nStoreID] = nThreadCurSocketCount + 1;
 		return true;
 	}
@@ -197,7 +197,7 @@ bool PortCompleteCore::AddSocketContext(int64 nStoreID, OPERATE_SOCKET_CONTEXT* 
 	CORE_WARNING("[PortCompleteCore::AddSocketContext] Add socket context same storeid[%llu] ", nStoreID);
 	return false;
 }
-bool PortCompleteCore::RemoveSocketContext(int64 nStoreID)
+bool PortCompleteCore::RemoveSocketContext(SI64 nStoreID)
 {
 	if (m_dicSocktPool.size() < 1)
 	{
@@ -205,7 +205,7 @@ bool PortCompleteCore::RemoveSocketContext(int64 nStoreID)
 		return true;
 	}
 
-	std::map<int64, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_dicSocktPool.find(nStoreID);
+	std::map<SI64, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_dicSocktPool.find(nStoreID);
 	if (iter != m_dicSocktPool.end())
 	{
 		CORE_MSG("[PortCompleteCore::RemoveSocketContext] Remove SockContext[%llu]", nStoreID);
@@ -222,7 +222,7 @@ bool PortCompleteCore::ClearAllSockContext()
 	if (m_dicSocktPool.size() > 0)
 		return true;
 
-	std::map<int64, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_dicSocktPool.begin();
+	std::map<SI64, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_dicSocktPool.begin();
 	for (; iter != m_dicSocktPool.end(); ++iter)
 	{
 		if (nullptr != iter->second)
@@ -237,9 +237,9 @@ bool PortCompleteCore::ClearAllSockContext()
 	return true;
 }
 
-OPERATE_SOCKET_CONTEXT* PortCompleteCore::GetSockContext(int64 nStoreID)
+OPERATE_SOCKET_CONTEXT* PortCompleteCore::GetSockContext(SI64 nStoreID)
 {
-	std::map<int64, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_dicSocktPool.find(nStoreID);
+	std::map<SI64, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_dicSocktPool.find(nStoreID);
 	if (iter != m_dicSocktPool.end())
 		return iter->second;
 
@@ -251,25 +251,25 @@ OPERATE_SOCKET_CONTEXT* PortCompleteCore::GetSockContext(int64 nStoreID)
 
 #pragma region Useless
 //	添加链接
-bool PortCompleteCore::AddNewLink(int64 nLinkID, PortCompleteSocketInfo* pInfo)
+bool PortCompleteCore::AddNewLink(SI64 nLinkID, PortCompleteSocketInfo* pInfo)
 {
 	if (nullptr == pInfo)
 		return false;
 
-	std::map<int64, PortCompleteSocketInfo*>::iterator iter = m_dicLinkPool.find(nLinkID);
+	std::map<SI64, PortCompleteSocketInfo*>::iterator iter = m_dicLinkPool.find(nLinkID);
 	if (iter != m_dicLinkPool.end())
 	{
 		CORE_WARNING("Repead socket");
 		return false;
 	}
 
-	m_dicLinkPool.insert(std::pair<int64, PortCompleteSocketInfo*>(nLinkID, pInfo));
+	m_dicLinkPool.insert(std::pair<SI64, PortCompleteSocketInfo*>(nLinkID, pInfo));
 	return true;
 }
 //	移除链接
-bool PortCompleteCore::RemoveLink(int64 nLinkID)
+bool PortCompleteCore::RemoveLink(SI64 nLinkID)
 {
-	std::map<int64, PortCompleteSocketInfo*>::iterator iter = m_dicLinkPool.find(nLinkID);
+	std::map<SI64, PortCompleteSocketInfo*>::iterator iter = m_dicLinkPool.find(nLinkID);
 	if (iter != m_dicLinkPool.end())
 	{
 		if ((SOCKET)(iter->second->pSocket) != INVALID_SOCKET)
@@ -284,10 +284,35 @@ bool PortCompleteCore::RemoveLink(int64 nLinkID)
 
 	return false;
 }
+
+//	获取链接
+PortCompleteSocketInfo* PortCompleteCore::GetLink(SI64 nLinkID)
+{
+	std::map<SI64, PortCompleteSocketInfo*>::iterator iter = m_dicLinkPool.find(nLinkID);
+	if (iter != m_dicLinkPool.end())
+	{
+		return iter->second;
+	}
+
+	return nullptr;
+}
+//	发送消息
+bool PortCompleteCore::LinkSendMsg(SI64 nLinkID, const char* strMsg)
+{
+	return true;
+}
+
+//	接收消息
+bool PortCompleteCore::LinkRecvMsg(SI64 nLinkID, const char* strMsg)
+{
+	return true;
+}
+#pragma endregion
+
 //	清空链接
 bool PortCompleteCore::ClearAllLink()
 {
-	std::map<int64, PortCompleteSocketInfo*>::iterator iter = m_dicLinkPool.begin();
+	std::map<SI64, PortCompleteSocketInfo*>::iterator iter = m_dicLinkPool.begin();
 	for (; iter != m_dicLinkPool.end(); ++iter)
 	{
 		if (nullptr != iter->second)
@@ -303,29 +328,6 @@ bool PortCompleteCore::ClearAllLink()
 	m_dicLinkPool.clear();
 	return true;
 }
-//	获取链接
-PortCompleteSocketInfo* PortCompleteCore::GetLink(int64 nLinkID)
-{
-	std::map<int64, PortCompleteSocketInfo*>::iterator iter = m_dicLinkPool.find(nLinkID);
-	if (iter != m_dicLinkPool.end())
-	{
-		return iter->second;
-	}
-
-	return nullptr;
-}
-//	发送消息
-bool PortCompleteCore::LinkSendMsg(int64 nLinkID, const char* strMsg)
-{
-	return true;
-}
-
-//	接收消息
-bool PortCompleteCore::LinkRecvMsg(int64 nLinkID, const char* strMsg)
-{
-	return true;
-}
-#pragma endregion
 #pragma endregion
 
 #pragma region Queue process
@@ -334,7 +336,7 @@ bool PortCompleteCore::OnReadQueueTick(int nElapse)
 	if (m_dicCoreReadQueue.size() < 1)
 		return true;
 
-	std::map<int32, UnLockQueueBase*>::iterator iter = m_dicCoreReadQueue.begin();
+	std::map<SI32, UnLockQueueBase*>::iterator iter = m_dicCoreReadQueue.begin();
 	for (; iter != m_dicCoreReadQueue.end(); ++iter)
 	{
 		if (nullptr == iter->second)
@@ -367,7 +369,7 @@ bool PortCompleteCore::OnReadQueueTick(int nElapse)
 
 bool PortCompleteCore::OnQueueElementProcessEnter(UnLockQueueDataElementBase* pElement)
 {
-	uint32 uDataType = pElement->GetDataID();
+	UI32 uDataType = pElement->GetDataID();
 	switch (uDataType)
 	{
 	case EESDGT_REGISTER:
@@ -422,7 +424,7 @@ bool PortCompleteCore::OnSocketRegister(UnLockQueueDataElementBase* pElement)
 
 	bool bRet = true;
 	
-	int64 nID = MakeStoreID();
+	SI64 nID = MakeStoreID();
 	pSockContext->storeID = nID;
 	pSockContext->RecvThreadID = nID;
 
@@ -432,7 +434,7 @@ bool PortCompleteCore::OnSocketRegister(UnLockQueueDataElementBase* pElement)
 	return bRet;
 }
 
-bool PortCompleteCore::AddSocket2MsgThread(OPERATE_SOCKET_CONTEXT* pSockContext, int64 nThreadID)
+bool PortCompleteCore::AddSocket2MsgThread(OPERATE_SOCKET_CONTEXT* pSockContext, SI64 nThreadID)
 {
 	if (nullptr == pSockContext)
 		return false;

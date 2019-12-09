@@ -4,11 +4,11 @@
 
 
 #pragma region data type
-typedef long long int64;
-typedef unsigned int uint32;
-typedef unsigned long long uint64;
-typedef int int32;
-typedef unsigned short uint16;
+typedef long long SI64;
+typedef unsigned int UI32;
+typedef unsigned long long UI64;
+typedef int SI32;
+typedef unsigned short UI16;
 #pragma endregion
 
 //#ifndef _WIN_

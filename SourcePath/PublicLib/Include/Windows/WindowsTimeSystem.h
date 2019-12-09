@@ -15,10 +15,10 @@ double Windows_GetGMTTime();
 double Windows_GetGMTTimeStamp();
 
 //	获取时间戳（单位：毫秒）
-uint32 Windows_GetTimeStamp();
+UI32 Windows_GetTimeStamp();
 
 //	获取日期
-bool Windows_GetCurTimeString(char* strTime, uint32 uStrCout, const char* strParam = "", bool bNeedDayOfWeek = false);
+bool Windows_GetCurTimeString(char* strTime, UI32 uStrCout, const char* strParam = "", bool bNeedDayOfWeek = false);
 #endif	//	__WINDOWS_TIME_SYSTEM_H__
 
 #endif	//	_WINDOWS_

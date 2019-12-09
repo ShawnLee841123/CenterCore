@@ -32,7 +32,7 @@ bool UnLockQueueElementBase::Enable()
 	return (nullptr != m_pData) && (EQEST_IN == m_eStatus);
 }
 
-bool UnLockQueueElementBase::SetData(void* pData, uint32 uSize)
+bool UnLockQueueElementBase::SetData(void* pData, UI32 uSize)
 {
 	if (nullptr == pData)
 		return false;
@@ -66,7 +66,7 @@ void UnLockQueueElementBase::OnInQueue()
 	m_eStatus = EQEST_IN;
 }
 
-uint32 UnLockQueueElementBase::GetDataSize()
+UI32 UnLockQueueElementBase::GetDataSize()
 {
 	return m_uDataSize;
 }
@@ -105,7 +105,7 @@ void* UnLockQueueDataElementBase::GetData()
 	return m_pEleData;
 }
 
-bool UnLockQueueDataElementBase::SetData(UnLockQueueElementDataBase* pData, uint32 uSize)
+bool UnLockQueueDataElementBase::SetData(UnLockQueueElementDataBase* pData, UI32 uSize)
 {
 	if (nullptr == pData)
 		return false;
@@ -139,7 +139,7 @@ bool UnLockQueueDataElementBase::Enable()
 	return (nullptr != m_pEleData) && (EQEST_IN == m_eStatus);
 }
 
-uint32 UnLockQueueDataElementBase::GetDataID()
+UI32 UnLockQueueDataElementBase::GetDataID()
 {
 	return (nullptr != m_pEleData) ? m_pEleData->GetDataID() : 0;
 }
@@ -190,14 +190,14 @@ EQueueOperateResultType UnLockQueueBase::PushQueueElement(UnLockQueueElementBase
 	return EQORT_SUCCESS;
 }
 
-EQueueOperateResultType UnLockQueueBase::PushQueueElement(UnLockQueueElementDataBase* pData, uint32 uSize)
+EQueueOperateResultType UnLockQueueBase::PushQueueElement(UnLockQueueElementDataBase* pData, UI32 uSize)
 {
 	UnLockQueueDataElementBase* pElement = new UnLockQueueDataElementBase();
 	pElement->SetData(pData, uSize);
 	return PushQueueElement(pElement);
 }
 
-//EQueueOperateResultType UnLockQueueBase::PushQueueElement(void* pData, uint32 uSize)
+//EQueueOperateResultType UnLockQueueBase::PushQueueElement(void* pData, UI32 uSize)
 //{
 //	UnLockQueueElementBase* pElement = new UnLockQueueElementBase();
 //	pElement->SetData(pData, uSize);

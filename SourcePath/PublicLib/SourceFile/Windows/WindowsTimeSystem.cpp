@@ -10,7 +10,7 @@ double Windows_GetGMTTime()
 	FILETIME ft;
 	memset(&ft, 0, sizeof(ft));
 	GetSystemTimeAsFileTime(&ft);
-	double dTime = (double)(*((uint64*)&ft));
+	double dTime = (double)(*((UI64*)&ft));
 	dTime = dTime / 10000 / 1000 - 1164473600;
 	return dTime;
 }
@@ -21,12 +21,12 @@ double Windows_GetGMTTimeStamp()
 	return dTimeStamp;
 }
 
-uint32 Windows_GetTimeStamp()
+UI32 Windows_GetTimeStamp()
 {
 	return Windows_GetGMTTimeStamp();
 }
 
-bool Windows_GetCurTimeString(char* strTime, uint32 uStrCout, const char* strParam, bool bNeedDayOfWeek)
+bool Windows_GetCurTimeString(char* strTime, UI32 uStrCout, const char* strParam, bool bNeedDayOfWeek)
 {
 	if (nullptr == strTime)
 		return false;

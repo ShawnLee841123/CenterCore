@@ -49,7 +49,7 @@ protected:
 	int												m_nThreadID;			//	线程ID
 	int												m_nLogQueueID;			//	日志队列ID
 	int												m_nTickTime;			//	每帧时间
-	uint32											m_uLastTimeStamp;		//	上帧时间戳
+	UI32											m_uLastTimeStamp;		//	上帧时间戳
 	//队列ID = EStandQueueType << 16 + 当前匹配表数量
 	std::map<std::string, int>						m_dicQueueKey;			//	队列名称和ID匹配表			
 	UnLockQueueBase*								m_arrQueue[THREAD_QUEUE_MAX];				//	队列列表

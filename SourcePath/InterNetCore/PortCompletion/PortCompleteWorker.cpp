@@ -80,7 +80,7 @@ bool PortCompleteWorker::OnThreadDestroy()
 
 bool PortCompleteWorker::WorkFunctionEnable(PortCompletionThreadFunctionMask eMask, bool bEnable)
 {
-	uint32 uFlag = bEnable ? 1 : 0;
+	UI32 uFlag = bEnable ? 1 : 0;
 	m_uThreadFunc |= (uFlag << eMask);
 
 	return true;
@@ -88,7 +88,7 @@ bool PortCompleteWorker::WorkFunctionEnable(PortCompletionThreadFunctionMask eMa
 
 bool PortCompleteWorker::CheckFunctionEnable(PortCompletionThreadFunctionMask eMask)
 {
-	uint32 uFlag = 1;
+	UI32 uFlag = 1;
 	uFlag &= (m_uThreadFunc >> eMask);
 
 	return uFlag > 0;
@@ -306,7 +306,7 @@ bool PortCompleteWorker::DoAccept(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_
 
 bool PortCompleteWorker::DoRecv(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_IO_CONTEXT* pIoContext)
 {
-	std::map<uint32, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_pStoreInfo.find(pIoContext->link);
+	std::map<UI32, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_pStoreInfo.find(pIoContext->link);
 	if (iter == m_pStoreInfo.end())
 	{
 		THREAD_DEBUG("Can not Find store socket[%d]", pIoContext->link);
@@ -409,7 +409,7 @@ bool PortCompleteWorker::OnQueueElement(UnLockQueueElementBase* pElement)
 	if (nullptr == pDataElement)
 		return true;
 
-	uint32 uDataID = pDataElement->GetDataID();
+	UI32 uDataID = pDataElement->GetDataID();
 	switch (uDataID)
 	{
 		case EESDGT_REGISTER:
@@ -445,7 +445,7 @@ bool PortCompleteWorker::OnSocketRegisterData(SocketRegisterData* pData)
 	//WorkerStoreInfo* pStoreInfo = new WorkerStoreInfo();
 	//memcpy(&(pStoreInfo->Addr), &(pSockContext->clientAddr), sizeof(CORE_SOCKETADDR_IN));
 	//pStoreInfo->link = pSockContext->link;
-	m_pStoreInfo.insert(std::pair<uint32, OPERATE_SOCKET_CONTEXT*>(pIoContext->link, pSockContext));
+	m_pStoreInfo.insert(std::pair<UI32, OPERATE_SOCKET_CONTEXT*>(pIoContext->link, pSockContext));
 
 	pSockContext->RecvThreadID = m_nThreadID;
 

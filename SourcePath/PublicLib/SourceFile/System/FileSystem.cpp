@@ -9,7 +9,7 @@
 #endif
 
 //	获取当前工作路径
-bool GetCurrentDir(char* strOut, uint32 strCount)
+bool GetCurrentDir(char* strOut, UI32 strCount)
 {
 	bool bRet = false;
 #ifdef _WIN_

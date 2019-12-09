@@ -26,10 +26,10 @@ public:
 	SocketMessageData& operator=(const UnLockQueueElementDataBase rhv) override;
 	SocketMessageData& operator=(const SocketMessageData rhv);
 
-	uint64*					pSocket;
+	UI64*					pSocket;
 	char					strMesBuffer[IO_BUFFER_SIZE];
-	uint32					uBufferSize;
-	int64					nStoreID;
+	UI32					uBufferSize;
+	SI64					nStoreID;
 };
 
 class SocketRegisterData : public UnLockQueueElementDataBase

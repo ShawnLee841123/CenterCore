@@ -1,8 +1,8 @@
 ##-----------------------------------------------------------------
-##	Name			Inter net core
-##	Functional	Internet core sulotion program control
-##	creater		Shawn Lee
-##	create time	2019-12-1
+##
+##
+##
+##
 ##
 ##
 ##
@@ -33,19 +33,16 @@ set(PortCompletion_files ${PORT_COMPLETION_files_SourceFiles})
 ##-----------------------------------------------------------------
 ##	Center Core Win (windows)
 ##-----------------------------------------------------------------
-set(CENTER_CORE_WIN_files_SourceFiles
-	CenterCoreWinBasic/CenterCoreBasic.cpp
-	CenterCoreWinBasic/CenterCoreBasic.h
-	CenterCoreWinBasic/CenterLog.cpp
-	CenterCoreWinBasic/CenterLog.h
+set(CENTER_CORE_files_SourceFiles
+	CenterCoreBasic/CenterCoreBasic.cpp
+	CenterCoreBasic/CenterCoreBasic.h
+	CenterCoreBasic/CenterLog.cpp
+	CenterCoreBasic/CenterLog.h
 )
 
-source_group("CenterCoreWin" FILES ${CENTER_CORE_WIN_files_SourceFiles})
+source_group("CenterCore" FILES ${CENTER_CORE_files_SourceFiles})
 
-set(CenterCoreWin_files ${CENTER_CORE_WIN_files_SourceFiles})
-
-##-----------------------------------------------------------------
-
+set(CenterCore_files ${CENTER_CORE_files_SourceFiles})
 
 
 
@@ -56,7 +53,7 @@ if(WIN32)
 	add_definitions(-D_WIN_)
 	set(SOURCES_
 		${PortCompletion_files}
-		${CenterCoreWin_files}
+		${CenterCore_files}
 		${SOURCES_Interface}
 	)
 ##else(WIN32)

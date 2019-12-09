@@ -5,7 +5,7 @@
 #define PCWORK_TCOUNT 1		//	完成端口线程数量
 
 
-#include "../CenterCoreWinBasic/CenterCoreBasic.h"
+#include "../CenterCoreBasic/CenterCoreBasic.h"
 #include "../../PublicLib/Include/Common/TypeDefines.h"
 #include "PortCompleteQueueElementDataDefine.h"
 #include <map>
@@ -48,14 +48,14 @@ public:
 	PortCompleteSocketInfo();
 	virtual ~PortCompleteSocketInfo();
 
-	int64*	pSocket;
+	SI64*	pSocket;
 	int		nCurStatus;
 	char	strSocketInfo[1024];
 	char	strSendMsg[LISTEN_LINK_COUNT];
 	char	strRecvMsg[LISTEN_LINK_COUNT];
-	uint32	uSendCount;
-	uint32	uRecvCount;
-	int64	nLinkID;
+	UI32	uSendCount;
+	UI32	uRecvCount;
+	SI64	nLinkID;
 };
 
 //	所有socket链接都在listener里创建
@@ -78,27 +78,28 @@ protected:
 #pragma region Socket data operate
 	//	功能不全，暂时简单实用存储数量来做。后期会修改
 
-	virtual int64 MakeStoreID();
+	virtual SI64 MakeStoreID();
 #ifdef _WIN_
-	virtual bool AddSocketContext(int64 nStoreID, OPERATE_SOCKET_CONTEXT* pContext);
-	virtual bool RemoveSocketContext(int64 nStoreID);
+	virtual bool AddSocketContext(SI64 nStoreID, OPERATE_SOCKET_CONTEXT* pContext);
+	virtual bool RemoveSocketContext(SI64 nStoreID);
 	virtual bool ClearAllSockContext();
-	virtual OPERATE_SOCKET_CONTEXT* GetSockContext(int64 nStoreID);
+	virtual OPERATE_SOCKET_CONTEXT* GetSockContext(SI64 nStoreID);
 #endif
 #pragma region Useless
 	//	添加链接
-	virtual bool AddNewLink(int64 nLinkID, PortCompleteSocketInfo* pInfo);
+	virtual bool AddNewLink(SI64 nLinkID, PortCompleteSocketInfo* pInfo);
 	//	移除链接
-	virtual bool RemoveLink(int64 nLinkID);
+	virtual bool RemoveLink(SI64 nLinkID);
+	//	获取链接
+	virtual PortCompleteSocketInfo* GetLink(SI64 nLinkID);
+	//	发送消息
+	virtual bool LinkSendMsg(SI64 nLinkID, const char* strMsg);
+	//	接收消息
+	virtual bool LinkRecvMsg(SI64 nLinkID, const char* strMsg);
+#pragma endregion
+
 	//	清空链接
 	virtual bool ClearAllLink();
-	//	获取链接
-	virtual PortCompleteSocketInfo* GetLink(int64 nLinkID);
-	//	发送消息
-	virtual bool LinkSendMsg(int64 nLinkID, const char* strMsg);
-	//	接收消息
-	virtual bool LinkRecvMsg(int64 nLinkID, const char* strMsg);
-#pragma endregion
 #pragma endregion
 
 #pragma region Unlock queue about
@@ -111,27 +112,26 @@ protected:
 	virtual bool OnQueueElementProcessEnter(UnLockQueueDataElementBase* pElement);
 #ifdef _WIN_
 	virtual bool OnSocketRegister(UnLockQueueDataElementBase* pElement);
-	virtual bool AddSocket2MsgThread(OPERATE_SOCKET_CONTEXT* pSockContext, int64 nThreadID);
+	virtual bool AddSocket2MsgThread(OPERATE_SOCKET_CONTEXT* pSockContext, SI64 nThreadID);
 #endif
 	virtual bool OnSocketMessage(UnLockQueueDataElementBase* pElement);
 
 #pragma endregion
 
 #pragma region variable
-	std::map<int64, PortCompleteSocketInfo*>	m_dicLinkPool;		//	暂时不确定到底使用哪个
+	std::map<SI64, PortCompleteSocketInfo*>	m_dicLinkPool;		//	暂时不确定到底使用哪个
 #ifdef _WIN_
-	std::map<int64, OPERATE_SOCKET_CONTEXT*>		m_dicSocktPool;		//	
+	std::map<SI64, OPERATE_SOCKET_CONTEXT*>		m_dicSocktPool;		//	
 #endif
 	PortCompleteWorker*			m_arrWorkThread[PCWORK_TCOUNT];
 	void*						m_pCompletionPort;
 
-	std::map<int64, int32>						m_dicWorkerSocketCount;	//	线程上的Socket数量，计数使用，方便后续线程间的负载均衡
+	std::map<SI64, SI32>						m_dicWorkerSocketCount;	//	线程上的Socket数量，计数使用，方便后续线程间的负载均衡
 	
-
 	//	读取队列
-	std::map<int32, UnLockQueueBase*>			m_dicCoreReadQueue;
+	std::map<SI32, UnLockQueueBase*>			m_dicCoreReadQueue;
 	//	写入队列
-	std::map<int32, UnLockQueueBase*>			m_dicCoreWriteQueue;
+	std::map<SI32, UnLockQueueBase*>			m_dicCoreWriteQueue;
 
 #pragma endregion
 };

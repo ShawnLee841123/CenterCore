@@ -7,7 +7,7 @@
 #include "../Common/TypeDefines.h"
 #include <stdio.h>
 //	获取当前工作路径
-bool Windows_GetCurrentDir(char* strOut, uint32 strCount);
+bool Windows_GetCurrentDir(char* strOut, UI32 strCount);
 
 //	创建目录
 bool Windows_CreatePath(const char* strName);
