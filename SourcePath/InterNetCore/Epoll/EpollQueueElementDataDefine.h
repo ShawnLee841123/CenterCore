@@ -3,12 +3,15 @@
 #define __EPOLL_QUEUE_ELEMENT_DATA_DEFINE_H__
 
 #include "../../PublicLib/Include/Common/TypeDefines.h"
-#include "../../PublicLib/Include/Common/UnLockElementtypeDefine.h"
+#include "../../PublicLib/Include/Common/UnLockElementTypeDefine.h"
+
+#include <sys/types.h>
+#include <sys/socket.h>
 
 #pragma region Gloabl define
 
-#define CORE_SOCKETADDR_IN socketaddr_in
-#define CORE_SOCKETADD socketaddr
+#define CORE_SOCKETADDR_IN struct socketaddr_in
+#define CORE_SOCKETADD struct socketaddr
 #define CORE_SOCKET SI32
 
 #define LISTEN_LINK_COUNT 4096

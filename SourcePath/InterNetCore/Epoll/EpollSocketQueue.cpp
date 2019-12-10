@@ -1,21 +1,31 @@
 
 #include "EpollSocketQueue.h"
 #include "EpollSocketQueueElement.h"
-#include "../../PublicLib/Include/Common/UnlockElementTypeDefine.h"
+#include "../../PublicLib/Include/Common/UnLockElementTypeDefine.h"
 
 EpollSocketQueue::EpollSocketQueue(): m_QueueFuncMask(0)
 {
-	m_vQueue.clear();
+	for (int i = 0; i < SOCKET_QUERY_ELEMENT_MAX; i++)
+	{
+		m_arrQueue[i] = nullptr;
+	}
 }
 
 EpollSocketQueue::~EpollSocketQueue()
 {
 	m_QueueFuncMask = 0;
-	m_vQueue.clear();
+	for(int i = 0; i < SOCKET_QUERY_ELEMENT_MAX; i++)
+	{
+		if (nullptr == m_arrQueue[i])
+		{
+			delete m_arrQueue[i];
+			m_arrQueue[i] = nullptr;
+		}
+	}
 }
 
 #pragma region 
-bool EpollSocketQueue::SetQueueFuncMask(SI16 nMask)
+bool EpollSocketQueue::SetQueueFuncMask(UI16 nMask)
 {
 	m_QueueFuncMask |= nMask;
 
@@ -34,7 +44,7 @@ bool EpollSocketQueue::SetQueueFuncMask(SI16 nMask)
 
 bool EpollSocketQueue:: CheckQueueCanDo(EpollOperateType eMask)
 {
-	SI16 nFlag = 1;
+	UI16 nFlag = 1;
 	nFlag &= (m_QueueFuncMask >> eMask);
 
 	return nFlag > 0;

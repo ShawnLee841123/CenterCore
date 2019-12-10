@@ -33,7 +33,7 @@ public:
 
 #pragma region Socket Functional operate
 	//	设置本队列功能标记，设计目的只支持单一操作，要么读、要么写(或监听连接)。
-	virtual bool SetQueueFuncMask(SI16 nMask);
+	virtual bool SetQueueFuncMask(UI16 nMask);
 	//	检查本队列是否具有功能标记
 	virtual bool CheckQueueCanDo(EpollOperateType eMask);
 #pragma endregion
@@ -56,7 +56,7 @@ protected:
 
 #pragma region Variable
 	_PER_IO_CONTEXT*				m_arrQueue[SOCKET_QUERY_ELEMENT_MAX];
-	SI16						m_QueueFuncMask;	//	队列操作标记
+	UI16						m_QueueFuncMask;	//	队列操作标记
 #pragma endregion
 };
 

@@ -36,7 +36,7 @@ public:
 	void RemoveIoOperate(LPOPERATE_IO_CONTEXT pOperate);
 
 	CORE_SOCKET				link;			//	客户端链接
-	CORE_SOCKETADDR_IN			clientAddr;		//	客户端地址
+	CORE_SOCKETADDR_IN*			clientAddr;		//	客户端地址
 	SI32					RecvThreadID;		//	接收消息线程ID
 	SI32					SendThreadID;		//	发送消息线程ID
 	std::vector<LPOPERATE_IO_CONTEXT>	vIoContext;		//	IO操作队列
@@ -50,7 +50,7 @@ public:
 struct WorkerStoreInfo
 {
 	CORE_SOCKET		link;
-	CORE_SOCKETADDR_IN	addr;
+	CORE_SOCKETADDR_IN*	addr;
 	UI64			UUID;
 };
 
