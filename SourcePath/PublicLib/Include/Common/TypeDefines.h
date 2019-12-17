@@ -9,6 +9,7 @@ typedef unsigned int UI32;
 typedef unsigned long long UI64;
 typedef int SI32;
 typedef unsigned short UI16;
+typedef short SI16;
 #pragma endregion
 
 //#ifndef _WIN_
