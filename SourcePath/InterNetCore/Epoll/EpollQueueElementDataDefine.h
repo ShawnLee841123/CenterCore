@@ -10,8 +10,8 @@
 
 #pragma region Gloabl define
 
-#define CORE_SOCKETADDR_IN struct socketaddr_in
-#define CORE_SOCKETADD struct socketaddr
+#define CORE_SOCKETADDR_IN socketaddr_in
+#define CORE_SOCKETADD socketaddr
 #define CORE_SOCKET SI32
 
 #define LISTEN_LINK_COUNT 4096
