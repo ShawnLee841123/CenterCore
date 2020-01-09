@@ -7,7 +7,9 @@
 #include "../../PublicLib/Include/System/FileSystem.h"
 #include "../../PublicLib/Include/System/TimeSystem.h"
 #include <vector>
-#include <string>
+#include <string.h>
+//	for va_start va_end
+#include <stdarg.h>
 #ifdef _WIN_
 #include <windows.h>
 #endif

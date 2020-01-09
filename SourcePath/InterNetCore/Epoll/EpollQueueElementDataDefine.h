@@ -5,8 +5,10 @@
 #include "../../PublicLib/Include/Common/TypeDefines.h"
 #include "../../PublicLib/Include/Common/UnLockElementTypeDefine.h"
 
+//	sockaddr Defines need <sys/types.h> and <sys/socket.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+//	sockaddr_in Defines need <netinet/in.h> and <arpa/inet.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
