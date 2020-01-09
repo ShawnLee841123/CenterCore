@@ -16,8 +16,10 @@
 
 
 
-CenterCoreBasic::CenterCoreBasic() : m_pParentCore(nullptr), m_strName("CenterCoreBasic"), m_pSelfLogQueue(nullptr), m_pLogRegisterQueue(nullptr), m_pLogThread(nullptr)
-{}
+CenterCoreBasic::CenterCoreBasic() : m_pParentCore(nullptr), m_pSelfLogQueue(nullptr), m_pLogRegisterQueue(nullptr), m_pLogThread(nullptr)
+{
+	sprintf(m_strName, "%s", "CenterCoreBasic");
+}
 CenterCoreBasic::~CenterCoreBasic()
 {}
 
