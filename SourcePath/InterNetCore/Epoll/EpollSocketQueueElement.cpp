@@ -18,7 +18,7 @@ _PER_IO_CONTEXT& _PER_IO_CONTEXT::operator=(const _PER_IO_CONTEXT rhv)
 	datalength = rhv.datalength;
 	link = rhv.link;
 	operateType = rhv.operateType;
-	memcpy(&databuf, &rhv.databuf, sizeof(IO_BUFFER_SIZE) * char);
+	memcpy(databuf, rhv.databuf, sizeof(IO_BUFFER_SIZE) * char);
 	return *this;
 }
 
@@ -37,7 +37,7 @@ void _PER_IO_CONTEXT::ResetDataBuff()
 _PER_SOCKET_CONTEXT::_PER_SOCKET_CONTEXT(): link(INVALID_SOCKET), storeID(0)
 {
 	vIoContext.clear();
-	memset(&clientAddr, 0, sizeof(CORE_SOCKETADDR_IN));
+	memset(clientAddr, 0, sizeof(CORE_SOCKETADDR_IN));
 }
 
 _PER_SOCKET_CONTEXT::~_PER_SOCKET_CONTEXT()
@@ -49,7 +49,7 @@ _PER_SOCKET_CONTEXT& _PER_SOCKET_CONTEXT::operator=(const _PER_SOCKET_CONTEXT rh
 {
 	link = rhv.link;
 	storeID = rhv.storeID;
-	memcpy(&clientAddr, &(rhv.clientAddr), sizeof(CORE_SOCKETADDR_IN));
+	memcpy(clientAddr, (rhv.clientAddr), sizeof(CORE_SOCKETADDR_IN));
 	int nIoCount = (int)rhv.vIoContext.size();
 	for (int i = 0; i < nIoCount; i++)
 	{
