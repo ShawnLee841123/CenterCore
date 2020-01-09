@@ -19,13 +19,13 @@ _PER_IO_CONTEXT& _PER_IO_CONTEXT::operator=(const _PER_IO_CONTEXT rhv)
 	datalength = rhv.datalength;
 	link = rhv.link;
 	operateType = rhv.operateType;
-	memcpy(databuf, rhv.databuf, sizeof(IO_BUFFER_SIZE) * char);
+	memcpy(databuf, rhv.databuf, sizeof(char) * IO_BUFFER_SIZE);
 	return *this;
 }
 
 void _PER_IO_CONTEXT::ResetDataBuff()
 {
-	memset(databuf, 0, sizeof(IO_BUFFER_SIZE) * char);
+	memset(databuf, 0, sizeof(char) * IO_BUFFER_SIZE);
 	datalength = 0;
 }
 
