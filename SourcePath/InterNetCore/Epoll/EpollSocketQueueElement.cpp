@@ -1,5 +1,6 @@
 #include "EpollSocketQueueElement.h"
-
+#include "EpollQueueElementDataDefine.h"
+#include <string.h>
 
 #pragma region IO Operation
 
