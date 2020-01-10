@@ -42,6 +42,8 @@ public:
 	virtual bool AddIOOperate(_PER_IO_CONTEXT* pContext);
 	//	队列工作，目前还没想好返回值用什么，只是觉得应该返回错误类型等等这些信息
 	virtual SI32 QueueWork(_PER_SOCKET_CONTEXT* pSocketContext);
+	//	移除IO操作，将一个IO操作扔出队列
+
 
 protected:
 
@@ -57,6 +59,7 @@ protected:
 #pragma region Variable
 	_PER_IO_CONTEXT*				m_arrQueue[SOCKET_QUERY_ELEMENT_MAX];
 	UI16						m_QueueFuncMask;	//	队列操作标记
+	SI32						m_nCurElementCount;
 #pragma endregion
 };
 

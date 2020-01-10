@@ -3,7 +3,7 @@
 #include "EpollSocketQueueElement.h"
 #include "../../PublicLib/Include/Common/UnLockElementTypeDefine.h"
 
-EpollSocketQueue::EpollSocketQueue(): m_QueueFuncMask(0)
+EpollSocketQueue::EpollSocketQueue(): m_QueueFuncMask(0), m_nCurElementCount(0)
 {
 	for (int i = 0; i < SOCKET_QUERY_ELEMENT_MAX; i++)
 	{
@@ -22,6 +22,7 @@ EpollSocketQueue::~EpollSocketQueue()
 			m_arrQueue[i] = nullptr;
 		}
 	}
+	m_nCurElementCount = 0;
 }
 
 #pragma region 
@@ -60,37 +61,71 @@ bool EpollSocketQueue::AddIOOperate(_PER_IO_CONTEXT* pContext)
 	if (!CheckQueueCanDo(pContext->operateType))
 		return false;
 
-	m_vQueue.push_back(pContext);
+	if (m_nCurElementCount >= SOCKET_QUERY_ELEMENT_MAX)
+		return false;
+
+	m_arrQueue[m_nCurElementCount] = pContext;
+	m_nCurElementCount++;
+	return true;
+}
+
+bool EpollSocketQueue::RemoveIOOperate(int nIndex)
+{
+	if (nIndex < 0)
+		return false;
+
+	if (nIndex >= m_nCurElementCount)
+		return false;
+
+	//	将队尾元素拿到这里来
+	m_arrQueue[nIndex] = m_arrQueue[m_nCurElementCount];
+	m_arrQueue[m_nCurElementCount] = nullptr;
+	m_nCurElementCount--;
+
 	return true;
 }
 
 //	队列工作
 int EpollSocketQueue::QueueWork(_PER_SOCKET_CONTEXT* pSocketContext)
 {
-	while (m_vQueue.size() > 0)
+	while (m_nCurElementCount > 0)
 	{
-		std::vector<_PER_IO_CONTEXT*>::iterator iter = m_vQueue.begin();
-		for(; iter != m_vQueue.end();)
+		for(int i = 0; i < m_nCurElementCount;)
 		{
 			//	TODO: 监听
 			if (CheckQueueCanDo(ECPOT_ACCEPT))
 			{
-				int nRet = DoAccept(pSocketContext, *iter);
+				int nRet = DoAccept(pSocketContext, m_arrQueue[i]);
+				if (nRet > 0)
+				{
+					RemoveIOOperate(i);
+					continue;
+				}
 			}
 			
 			//	TODO: 收消息
 			if (CheckQueueCanDo(ECPOT_RECIVE))
 			{
-				int nRet = DoReciveMsg(pSocketContext, *iter);
+				int nRet = DoReciveMsg(pSocketContext, m_arrQueue[i]);
+				if (nRet > 0)
+				{
+					RemoveIOOperate(i);
+					continue;
+				}
 			}
 
 			//	TODO: 发消息
 			if (CheckQueueCanDo(ECPOT_SEND))
 			{
-				int nRet = DoSendMsg(pSocketContext, *iter);
+				int nRet = DoSendMsg(pSocketContext, m_arrQueue[i]);
+				if (nRet > 0)
+				{
+					RemoveIOOperate(i);
+					continue;
+				}
 			}
 			
-			iter++;
+			i++;
 		}
 	}
 
