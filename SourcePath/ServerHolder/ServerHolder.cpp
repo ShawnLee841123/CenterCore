@@ -5,11 +5,15 @@
 
 
 //#include "PortCompletion/PortCompleteCore.h"
+#ifdef _WIN_
 #include "../InterNetCore/PortCompletion/PortCompleteCore.h"
+#else
+#endif
 
 int main()
 {
 
+#ifdef _WIN_
 	PortCompleteCore oCore;
 	if (!oCore.Initialize(nullptr))
 		return 0;
@@ -23,7 +27,8 @@ int main()
 	}
 
 	oCore.Destroy();
-
+#else
+#endif
 	return 0;
 }
 
