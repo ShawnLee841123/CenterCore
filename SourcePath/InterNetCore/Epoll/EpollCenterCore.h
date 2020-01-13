@@ -30,7 +30,7 @@ protected:
 	virtual bool OnDestroy() override;
 #pragma endregion
 
-	virtual int64 MakeStoreID();
+	virtual SI64 MakeStoreID();
 
 #pragma region Queue process
 	virtual bool OnReadQueueTick(int nElapse);
@@ -42,9 +42,9 @@ protected:
 
 #pragma region variable
 
-	std::map<int64, int32> 			m_dicWorkerSocketCount;
-	std::map<int32, UnLockQueueBase*>	m_dicCoreReadQueue;
-	std::map<int32, UnLockQueueBase*>	m_dicCoreWriteQueue;
+	std::map<SI64, SI32> 			m_dicWorkerSocketCount;
+	std::map<SI32, UnLockQueueBase*>	m_dicCoreReadQueue;
+	std::map<SI32, UnLockQueueBase*>	m_dicCoreWriteQueue;
 #pragma endregion
 
 };
