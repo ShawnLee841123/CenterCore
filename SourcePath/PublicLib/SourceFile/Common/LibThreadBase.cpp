@@ -59,6 +59,7 @@ bool ThreadBase::OnThreadStart(int nThreadID)
 	m_nThreadID = nThreadID;
 	m_eCurStatus = ESTST_START;
 	m_Thread = std::thread(&ThreadBase::ThreadTick, this);
+	THREAD_DEBUG("Thread Start");
 	return true;
 }
 
@@ -231,6 +232,19 @@ int ThreadBase::GetQueueID(const char* strQueueName)
 		return iter->second;
 
 	return -1;
+}
+
+int ThreadBase::GetQueueIndex(int nQueueID)
+{
+	int nIndex = (nQueueID & 0x0000FFFF);
+	return nIndex;
+}
+
+int ThreadBase::GetQueueIndex(const char* strQueueName)
+{
+	int nQueueID = GetQueueID(strQueueName);
+
+	return GetQueueIndex(nQueueID);
 }
 
 bool ThreadBase::IsReadQueueType(int nQueueID)

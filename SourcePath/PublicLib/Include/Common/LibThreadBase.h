@@ -37,6 +37,8 @@ protected:
 
 	//	获取队列ID
 	virtual int GetQueueID(const char* strQueueName);
+	virtual int GetQueueIndex(int nQueueID);
+	virtual int GetQueueIndex(const char* strQueueName);
 	virtual bool IsReadQueueType(int nQueueID);
 	virtual bool IsWriteQueueType(int nQueueID);
 	virtual bool IsLogQueue(int nQueueID);

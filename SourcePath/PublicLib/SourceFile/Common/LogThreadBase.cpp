@@ -91,7 +91,7 @@ bool LogThreadBase::ReadQueueProcess(int nElapse)
 
 	//	Get register queue index. 
 	//	this queue data read implement will be optimization declear soon
-	int nRegisterQueueIndex = GetQueueID("RegisterQueue");
+	int nRegisterQueueIndex = GetQueueIndex("RegisterQueue");
 	for (int i = 0; i < nCurQueueCount; i++)
 	{
 		UnLockQueueBase* pQueue = m_arrQueue[i];

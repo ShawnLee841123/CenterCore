@@ -2,7 +2,7 @@
 #ifndef __PORT_COMPLETE_CORE_H__
 #define __PORT_COMPLETE_CORE_H__
 
-#define PCWORK_TCOUNT 1		//	完成端口线程数量
+#define PCWORK_TCOUNT 2		//	完成端口线程数量
 
 
 #include "../CenterCoreBasic/CenterCoreBasic.h"
