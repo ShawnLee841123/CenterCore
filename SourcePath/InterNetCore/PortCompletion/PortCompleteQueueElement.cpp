@@ -1,8 +1,12 @@
 ﻿
 #include "PortCompleteQueueElement.h"
 #include "PortCompleteBaseDefine.h"
-
-SocketMessageData::SocketMessageData(): pSocket(nullptr), uBufferSize(0), nStoreID(0)
+#include "../../PublicLib/Include/Common/TypeDefines.h"
+#ifdef _WIN_
+SocketMessageData::SocketMessageData(): pSocket(0), uBufferSize(0), nStoreID(0)
+#else
+SocketMessageData::SocketMessageData() : pSocket(0), uBufferSize(0), nStoreID(0)
+#endif
 {
 	DataID = EESDGT_NONE;
 	memset(strMesBuffer, 0, sizeof(char) * IO_BUFFER_SIZE);

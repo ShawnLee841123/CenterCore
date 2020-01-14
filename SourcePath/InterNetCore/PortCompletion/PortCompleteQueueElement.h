@@ -2,15 +2,15 @@
 #ifndef __PORT_COMPLETE_QUEUE_ELEMENT_H__
 #define __PORT_COMPLETE_QUEUE_ELEMENT_H__
 
-#include "../../PublicLib/Include/Common/UnLockQueue.h"
-#include "../../PublicLib/Include/Common/TypeDefines.h"
+
 #include "../../CoreInterface/ICompletionPort.h"
 
 #include "PortCompleteQueueElementDataDefine.h"
+#include "../../PublicLib/Include/Common/UnLockQueue.h"
+#include "../../PublicLib/Include/Common/TypeDefines.h"
+
 
 #define MSG_BUFFER_COUNT	2048
-
-
 
 #ifdef _WIN_
 
@@ -26,7 +26,7 @@ public:
 	SocketMessageData& operator=(const UnLockQueueElementDataBase rhv) override;
 	SocketMessageData& operator=(const SocketMessageData rhv);
 
-	UI64*					pSocket;
+	CORE_SOCKET				pSocket;
 	char					strMesBuffer[IO_BUFFER_SIZE];
 	UI32					uBufferSize;
 	SI64					nStoreID;
@@ -43,7 +43,7 @@ public:
 
 	PortCompletionSocketRegisterType	eRegisterType;
 	OPERATE_SOCKET_CONTEXT*				pSocketContext;
-	int									nThreadID;
+	SI32								nThreadID;
 };
 #endif	//	_WIN_
 

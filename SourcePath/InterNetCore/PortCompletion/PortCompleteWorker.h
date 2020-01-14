@@ -3,14 +3,21 @@
 #define __PORT_COMPLETE_WORKER_H__
 
 #include "../../PublicLib/Include/Common/LibThreadBase.h"
+#include "../../PublicLib/Include/Common/TypeDefines.h"
 #include "PortCompleteQueueElementDataDefine.h"
 
 #ifdef _WIN_
+
+
 typedef struct _PER_IO_CONTEXT OPERATE_IO_CONTEXT;
 typedef struct _PER_SOCKET_CONTEXT OPERATE_SOCKET_CONTEXT;
 struct WSAOVERLAPPED;
 typedef struct _OVERLAPPED OVERLAPPED;
 class SocketRegisterData;
+class SocketMessageData;
+
+
+
 #endif
 
 struct WorkerStoreInfo;
@@ -39,12 +46,17 @@ protected:
 	bool InitialListenSocket();
 
 	bool DoAccept(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_IO_CONTEXT* pIoContext);
-	bool DoRecv(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_IO_CONTEXT* pIoContext);
 	bool PostAccept(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_IO_CONTEXT* pIoContext);
+	bool DoRecv(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_IO_CONTEXT* pIoContext);
 	bool PostRecv(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_IO_CONTEXT* pIoContext);
+	bool DoSend(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_IO_CONTEXT* pIoContext);
+	bool PostSend(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_IO_CONTEXT* pIoContext);
+
+	bool SendMsg(OPERATE_SOCKET_CONTEXT* pSockContext, const char* strMsg);
 
 	virtual bool OnQueueElement(UnLockQueueElementBase* pElement) override;
 	virtual bool OnSocketRegisterData(SocketRegisterData* pData);
+	virtual bool OnSocketMessageData(SocketMessageData* pData);
 #pragma endregion
 
 #endif
@@ -61,7 +73,7 @@ protected:
 	OVERLAPPED*							m_pLoopOverlapped;
 #endif
 
-	std::map<UI32, OPERATE_SOCKET_CONTEXT*>	m_pStoreInfo;
+	std::map<CORE_SOCKET, OPERATE_SOCKET_CONTEXT*>	m_dicStoreInfo;
 #pragma endregion
 
 };

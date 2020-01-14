@@ -3,7 +3,10 @@
 #include "PortCompleteBaseDefine.h"
 #include "PortCompleteQueueElement.h"
 #include "../../PublicLib/Include/Common/UnLockQueue.h"
+#include "../../PublicLib/Include/Common/TypeDefines.h"
 #ifdef _WIN_
+#include <iostream>
+#include <sstream>
 #include <MSWSock.h>
 #pragma warning(disable:4996)
 #endif
@@ -165,6 +168,7 @@ bool PortCompleteWorker::OnWorkerMainLoop(int nElapse)
 			{
 				if (CheckFunctionEnable(EPCTFT_SEND))
 				{
+					THREAD_MSG("Send Msg OK");
 					return true;
 				}
 			}
@@ -306,8 +310,8 @@ bool PortCompleteWorker::DoAccept(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_
 
 bool PortCompleteWorker::DoRecv(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_IO_CONTEXT* pIoContext)
 {
-	std::map<UI32, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_pStoreInfo.find(pIoContext->link);
-	if (iter == m_pStoreInfo.end())
+	std::map<CORE_SOCKET, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_dicStoreInfo.find(pIoContext->link);
+	if (iter == m_dicStoreInfo.end())
 	{
 		THREAD_DEBUG("Can not Find store socket[%d]", pIoContext->link);
 		return false;
@@ -369,7 +373,7 @@ bool PortCompleteWorker::PostAccept(OPERATE_SOCKET_CONTEXT* pSockContext, OPERAT
 	if (FALSE == pFn(pSockContext->link, pIoContext->link, pWBuff->buf, 0,
 		sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, &dwBytes, pOl))
 	{
-		int nErrorCode = WSAGetLastError();
+		SI32 nErrorCode = WSAGetLastError();
 		if (WSA_IO_PENDING != nErrorCode)
 		{
 			THREAD_ERROR("Post AcceptEx request faild. Error code[%d]", nErrorCode);
@@ -392,11 +396,93 @@ bool PortCompleteWorker::PostRecv(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_
 	pIoContext->ResetBuff();
 	pIoContext->operateType = ECPOT_RECIVE;
 
-	int nByteRecv = WSARecv(pIoContext->link, pWbuf, 1, &dwBytes, &dwFlags, pOl, nullptr);
-	int nErrorCode = WSAGetLastError();
+	SI32 nByteRecv = WSARecv(pIoContext->link, pWbuf, 1, &dwBytes, &dwFlags, pOl, nullptr);
+	SI32 nErrorCode = WSAGetLastError();
 	if ((SOCKET_ERROR == nByteRecv) && (WSA_IO_PENDING != nErrorCode))
 	{
 		THREAD_ERROR("Post recv request faild");
+		return false;
+	}
+
+	return true;
+}
+
+bool PortCompleteWorker::DoSend(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_IO_CONTEXT* pIoContext)
+{
+	std::map<CORE_SOCKET, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_dicStoreInfo.find(pIoContext->link);
+	if (m_dicStoreInfo.end() == iter)
+	{
+		THREAD_DEBUG("Can not Find store socket[%d]", pIoContext->link);
+		return false;
+	}
+
+	return true;
+}
+bool PortCompleteWorker::PostSend(OPERATE_SOCKET_CONTEXT* pSockContext, OPERATE_IO_CONTEXT* pIoContext)
+{
+	if (nullptr == pIoContext)
+		pIoContext = pSockContext->GetNewIoOperate();
+
+	DWORD dwFlags = 0;
+	DWORD dwBytes = 0;
+	WSABUF* pWBuf = &pIoContext->buffer;
+	WSAOVERLAPPED* pOl = &pIoContext->overlap;
+	pIoContext->ResetBuff();
+	pIoContext->operateType = ECPOT_SEND;
+	
+	SI32 nByteSend = WSASend(pIoContext->link, pWBuf, 1, &dwBytes, dwFlags, pOl, nullptr);
+	SI32 nErrorCode = WSAGetLastError();
+	if ((SOCKET_ERROR == nByteSend) && (WSA_IO_PENDING != nErrorCode))
+	{
+		THREAD_ERROR("Post send request faild");
+		return false;
+	}
+
+	return true;
+}
+
+bool PortCompleteWorker::SendMsg(OPERATE_SOCKET_CONTEXT* pSockContext, const char* strMsg)
+{
+	if (nullptr == pSockContext)
+	{
+		THREAD_ERROR("Socket Error");
+		return false;
+	}
+
+	if (nullptr == strMsg)
+	{
+		THREAD_DEBUG("Send Msg msg Error");
+		return false;
+	}
+
+	if (nullptr == strMsg)
+	{
+		THREAD_DEBUG("Can not send empty msg");
+		return false;
+	}
+
+	char msg[MSG_BUFFER_COUNT] = { 0 };
+	
+	sprintf(msg, "Server Reply Client[] Msg: %s", strMsg);
+	SI32 nMsgLen = strlen(msg);
+
+	OPERATE_IO_CONTEXT* pIoContext = pSockContext->GetNewIoOperate();
+	pIoContext->ResetBuff();
+
+	//strncpy(pIoContext->buffer, msg, MSG_BUFFER_COUNT);
+	pIoContext->buffer.buf = msg;
+	pIoContext->buffer.len = MSG_BUFFER_COUNT;
+	DWORD dwFlags = 0;
+	DWORD dwBytes = nMsgLen;
+	WSAOVERLAPPED* pOl = &pIoContext->overlap;
+	WSABUF* pWBuf = &pIoContext->buffer;
+	pIoContext->operateType = ECPOT_SEND;
+	
+	SI32 nByteSend = WSASend(pIoContext->link, pWBuf, 1, &dwBytes, dwFlags, pOl, nullptr);
+	SI32 nErrorCode = WSAGetLastError();
+	if ((SOCKET_ERROR == nByteSend) && (WSA_IO_PENDING != nErrorCode))
+	{
+		THREAD_ERROR("Post send request faild");
 		return false;
 	}
 
@@ -416,6 +502,12 @@ bool PortCompleteWorker::OnQueueElement(UnLockQueueElementBase* pElement)
 			{
 				SocketRegisterData* pData = (SocketRegisterData*)pDataElement->GetData();
 				return OnSocketRegisterData(pData);
+			}
+			break;
+		case EESDGT_MESSAGE_SEND:
+			{
+				SocketMessageData* pData = (SocketMessageData*)pDataElement->GetData();
+				return OnSocketMessageData(pData);
 			}
 			break;
 	}
@@ -445,7 +537,7 @@ bool PortCompleteWorker::OnSocketRegisterData(SocketRegisterData* pData)
 	//WorkerStoreInfo* pStoreInfo = new WorkerStoreInfo();
 	//memcpy(&(pStoreInfo->Addr), &(pSockContext->clientAddr), sizeof(CORE_SOCKETADDR_IN));
 	//pStoreInfo->link = pSockContext->link;
-	m_pStoreInfo.insert(std::pair<UI32, OPERATE_SOCKET_CONTEXT*>(pIoContext->link, pSockContext));
+	m_dicStoreInfo.insert(std::pair<CORE_SOCKET, OPERATE_SOCKET_CONTEXT*>(pIoContext->link, pSockContext));
 
 	pSockContext->RecvThreadID = m_nThreadID;
 
@@ -456,6 +548,31 @@ bool PortCompleteWorker::OnSocketRegisterData(SocketRegisterData* pData)
 	}
 
 	PostRecv(pSockContext, (OPERATE_IO_CONTEXT*)pIoContext);
+	return true;
+}
+
+bool PortCompleteWorker::OnSocketMessageData(SocketMessageData* pData)
+{
+	if (!CheckFunctionEnable(EPCTFT_SEND))
+	{
+		THREAD_ERROR("[PortCompleteWorker::OnSocketRegisterData] Send function should not be have on Thread[%d]", m_nThreadID);
+		return true;
+	}
+
+	if (pData->nStoreID != m_nThreadID)
+	{
+		THREAD_ERROR("[PortCompleteWorker::OnSocketRegisterData] Socket do not stored in this Thread[%llu]", pData->nStoreID);
+		return true;
+	}
+
+	std::map<CORE_SOCKET, OPERATE_SOCKET_CONTEXT*>::iterator iter = m_dicStoreInfo.find(pData->pSocket);
+	if (m_dicStoreInfo.end() == iter)
+	{
+		THREAD_ERROR("[PortCompleteWorker::OnSocketRegisterData] Can not find Socket[%d] in this Thread", pData->pSocket);
+		return true;
+	}
+
+	SendMsg(iter->second, pData->strMesBuffer);
 	return true;
 }
 #endif

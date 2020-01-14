@@ -81,18 +81,18 @@ bool LogThreadBase::OnQueueElement(UnLockQueueElementBase* pElement)
 	return bRet;
 }
 
-bool LogThreadBase::ReadQueueProcess(int nElapse)
+bool LogThreadBase::ReadQueueProcess(SI32 nElapse)
 {
 	if (m_dicQueueKey.size() <= 0)
 		return true;
 
 	//	队列读取，只针对目前已有的队列进行操作，如果有注册或者新增的队列，那么，等下一帧再来
-	int nCurQueueCount = m_dicQueueKey.size();
+	SI32 nCurQueueCount = (SI32)m_dicQueueKey.size();
 
 	//	Get register queue index. 
 	//	this queue data read implement will be optimization declear soon
-	int nRegisterQueueIndex = GetQueueIndex("RegisterQueue");
-	for (int i = 0; i < nCurQueueCount; i++)
+	SI32 nRegisterQueueIndex = GetQueueIndex("RegisterQueue");
+	for (SI32 i = 0; i < nCurQueueCount; i++)
 	{
 		UnLockQueueBase* pQueue = m_arrQueue[i];
 		if (nullptr == pQueue)
@@ -212,7 +212,7 @@ bool LogThreadBase::OutputStringToFile(const char* strValue, int nLevel)
 		return false;
 	}
 
-	int nLen = strlen(strValue) + 1;
+	SI32 nLen = (SI32)strlen(strValue) + 1;
 	fwrite(strValue, nLen, 1, (FILE*)m_pLogFile);
 
 	return true;

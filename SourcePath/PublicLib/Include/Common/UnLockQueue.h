@@ -38,7 +38,7 @@ protected:
 
 #pragma endregion
 
-//	下列两个结构可任意取一个集成
+//	下列两个结构可任意取一个继承
 #pragma region Element Data Base
 class UnLockQueueElementDataBase
 {

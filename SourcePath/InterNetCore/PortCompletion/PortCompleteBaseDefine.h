@@ -7,23 +7,10 @@
 #include <vector>
 #include "PortCompleteQueueElementDataDefine.h"
 
-
-
 #ifdef _WIN_
 //#include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <MSWSock.h>
-
-#ifdef _WIN_
-#define CORE_SOCKETADDR_IN SOCKADDR_IN
-#define CORE_SOCKADDR SOCKADDR
-#define CORE_SOCKET SOCKET
-#else
-#define CORE_SOCKETADDR_IN socketaddr_in
-#define CORE_SOCKADDR socketaddr
-#define CORE_SOCKET int
-#endif
-
 
 #define SAFE_RELEASE_SOCKET(a) {if (INVALID_SOCKET != a){closesocket(a); a = INVALID_SOCKET;}}
 //	单IO操作数据		用于sockect的每一个操作

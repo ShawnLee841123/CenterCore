@@ -16,6 +16,24 @@ typedef short SI16;
 //typedef NULL nullptr;
 //#endif
 
+
+#ifndef _WIN_
+
+#define CORE_SOCKETADDR_IN socketaddr_in
+#define CORE_SOCKADDR socketaddr
+#define CORE_SOCKET SI32
+
+#else
+
+typedef UI64        SOCKET;
+
+#define CORE_SOCKETADDR_IN SOCKADDR_IN
+#define CORE_SOCKADDR SOCKADDR
+#define CORE_SOCKET SOCKET
+
+#endif
+
+
 #pragma region Thread status
 enum EServerThreadStatusType
 {
