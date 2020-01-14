@@ -26,3 +26,8 @@ PROJECT(CenterCore)
 ADD_SUBDIRECTORY(PublicLib)
 ADD_SUBDIRECTORY(InterNetCore)
 ADD_SUBDIRECTORY(ServerHolder)
+
+#	Add Client Windows Test Demo
+if(WIN32)
+	ADD_SUBDIRECTORY(ClientTest)
+endif(WIN32)
