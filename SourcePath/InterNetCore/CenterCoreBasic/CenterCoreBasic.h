@@ -4,6 +4,7 @@
 
 #include "../../CoreInterface/ICenterCore.h"
 #include <map>
+#include <string>
 
 
 class LogThreadBase;					//	日志线程
